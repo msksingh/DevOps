@@ -1,0 +1,36 @@
+gcloud source repos clone devops-repo
+
+cd ~/gcp-course/devops-repo
+git add --all
+
+git config --global user.email "student-00-f01d844aa124@qwiklabs.net"
+git config --global user.name "student-00-f01d844aa124"
+
+git commit -a -m "Initial Commit"
+git push origin master
+
+
+FROM python:3.7
+WORKDIR /app
+COPY . .
+RUN pip install gunicorn
+RUN pip install -r requirements.txt
+ENV PORT=80
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 main:app
+
+cd ~/gcp-course/devops-repo
+echo $DEVSHELL_PROJECT_ID
+gcloud builds submit --tag gcr.io/$DEVSHELL_PROJECT_ID/devops-image:v0.1 .
+
+gcr.io/<your-project-id-here>/devops-image:v0.1 (change the project ID where indicated)
+
+Trgger name : devops-trigger
+.*
+DockerFile
+Run the trigger
+
+cd ~/gcp-course/devops-repo
+git commit -a -m "Testing Build Trigger"
+git push origin master
+
+Test again with Virtual Machine
