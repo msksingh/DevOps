@@ -33,3 +33,12 @@ git commit -a -m "Testing Build Trigger"
 git push origin master
 
 Test again with Virtual Machine
+
+docker build -t name .
+docker images
+docker run -it -d docker_image_name
+docker ps
+docker ps -a
+docker exec -it container_name bash
+docker rm 
+docker rmi 
