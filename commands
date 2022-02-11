@@ -50,3 +50,5 @@ gcloud run deploy helloapp --source .
 cloud-run-source-deploy
 
 gcloud run deploy helloapp --source . --project qwiklabs-gcp-01-9f048f6700cd
+
+gcloud builds submit --config cloudbuild.yaml gs://cloud-build-examples/node-docker-example.tar.gz
