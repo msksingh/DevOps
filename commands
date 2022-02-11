@@ -42,3 +42,11 @@ docker ps -a
 docker exec -it container_name bash
 docker rm 
 docker rmi 
+
+Deploy apps directly on Cloud Build
+
+gcloud run deploy helloapp --source .
+
+cloud-run-source-deploy
+
+gcloud run deploy helloapp --source . --project qwiklabs-gcp-01-9f048f6700cd
