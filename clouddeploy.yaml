@@ -1,0 +1,55 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/${PROJECT_ID}/my-docker-repo/myimage', '.']
+images:
+  - 'us-central1-docker.pkg.dev/${PROJECT_ID}/my-docker-repo/myimage'
+
+gcloud builds submit --config cloudbuild.yaml
+
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/${PROJECT_ID}/my-docker-repo/myimage', '.']
+images:
+  - 'us-central1-docker.pkg.dev/${PROJECT_ID}/my-docker-repo/myimage'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', 'YOUR_SERVICE_NAME', '--image', 'us-central1-docker.pkg.dev/${PROJECT_ID}/my-docker-repo/myimage', '--region', 'YOUR_REGION', '--platform', 'managed']
+
+gcloud builds submit --config cloudbuild.yaml
+
+
+
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:latest' # Replace with your Artifact Registry details
+      - '.'
+
+  # Push the Docker image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:latest' # Replace with your Artifact Registry details
+
+  # Create a Cloud Deploy release
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'deploy'
+      - 'releases'
+      - 'create'
+      - 'my-release-name' # Give your release a name
+      - '--delivery-pipeline'
+      - 'YOUR_DELIVERY_PIPELINE' # Replace with your delivery pipeline name
+      - '--region'
+      - 'YOUR_REGION' # Replace with your region
+      - '--images'
+      - 'IMAGE=LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:latest' # Image for Cloud Deploy
+
+gcloud builds submit --config cloudbuild.yaml --region=YOUR_REGION
+
+
+
